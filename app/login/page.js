@@ -110,7 +110,7 @@ export default function LoginPage() {
 
         {/* Footer Text */}
         <div className="text-center mt-8 text-sm text-gray-500">
-          <p>SEO Metadata Review System</p>
+          <p>SEO Metadata Review System!</p>
         </div>
       </div>
     </div>
