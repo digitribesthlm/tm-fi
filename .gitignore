@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 K89Climber.csv
+scripts/import-csv.js
 # markdown docs
 *.md
 
