@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import bcrypt from 'bcryptjs'
 import { connectDB } from '../../../../lib/mongodb'
 
 export const authOptions = {
@@ -11,38 +12,36 @@ export const authOptions = {
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        console.log('Auth attempt for:', credentials.email)
-
         if (!credentials?.email || !credentials?.password) {
-          console.log('Missing credentials')
           return null
         }
 
         try {
           const { db } = await connectDB()
-          console.log('Connected to database')
 
           const user = await db.collection('users').findOne({
-            email: credentials.email,
-            status: 'active'
+            email: credentials.email
           })
 
           if (!user) {
-            console.log('User not found:', credentials.email)
             return null
           }
 
-          console.log('User found:', user.email)
+          // Check password: support both plain text and bcrypt
+          let isPasswordValid = false
 
-          // Check if password is plain text (not bcrypt hashed)
-          const isPasswordValid = user.password === credentials.password
+          // Check if password is bcrypt hashed (starts with $2a$ or $2b$)
+          if (user.password.startsWith('$2a$') || user.password.startsWith('$2b$')) {
+            // Use bcrypt compare for hashed passwords
+            isPasswordValid = await bcrypt.compare(credentials.password, user.password)
+          } else {
+            // Plain text comparison for non-hashed passwords
+            isPasswordValid = user.password === credentials.password
+          }
 
           if (!isPasswordValid) {
-            console.log('Invalid password for:', credentials.email)
             return null
           }
-
-          console.log('Login successful for:', credentials.email)
 
           return {
             id: user._id.toString(),
@@ -51,7 +50,6 @@ export const authOptions = {
             role: user.role
           }
         } catch (error) {
-          console.error('Auth error:', error)
           return null
         }
       }

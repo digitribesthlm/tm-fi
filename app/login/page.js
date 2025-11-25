@@ -26,7 +26,8 @@ export default function LoginPage() {
       if (result?.error) {
         setError('Invalid email or password')
       } else {
-        router.push('/')
+        // Redirect directly to review page after successful login
+        router.push('/review')
       }
     } catch (err) {
       setError('An error occurred during login')
@@ -109,7 +110,7 @@ export default function LoginPage() {
 
         {/* Footer Text */}
         <div className="text-center mt-8 text-sm text-gray-500">
-          <p>SEO Metadata Review Tool for Climber</p>
+          <p>SEO Metadata Review System</p>
         </div>
       </div>
     </div>
