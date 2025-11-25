@@ -471,9 +471,9 @@ export default function ReviewPage() {
           {debouncedSearchQuery && (
             <div className="mt-2 text-sm text-gray-600">
               {pagination.total === 0 ? (
-                <span className="text-red-600">No results found for "{debouncedSearchQuery}"</span>
+                <span className="text-red-600">No results found for &ldquo;{debouncedSearchQuery}&rdquo;</span>
               ) : (
-                <span>Found {pagination.total} result{pagination.total !== 1 ? 's' : ''} for "{debouncedSearchQuery}"</span>
+                <span>Found {pagination.total} result{pagination.total !== 1 ? 's' : ''} for &ldquo;{debouncedSearchQuery}&rdquo;</span>
               )}
             </div>
           )}
